@@ -24,8 +24,10 @@ RUN apt-get update && \
   nmap \
   openssh-client \
   openssh-server \
+  rclone \
   redis-tools \
   rsync \
+  s3fs \
   subnetcalc \
   telnet \
   traceroute \
