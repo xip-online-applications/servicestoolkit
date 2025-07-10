@@ -24,6 +24,7 @@ RUN apt-get update && \
   nmap \
   openssh-client \
   openssh-server \
+  postgresql-client \
   rclone \
   redis-tools \
   rsync \
