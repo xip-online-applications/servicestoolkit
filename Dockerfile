@@ -2,7 +2,6 @@ FROM debian:stable
 
 RUN apt-get update && \
   apt-get install -y \
-  7zip \
   awscli \
   bzip2 \
   curl \
@@ -24,6 +23,7 @@ RUN apt-get update && \
   nmap \
   openssh-client \
   openssh-server \
+  p7zip-full \
   postgresql-client \
   rclone \
   redis-tools \
