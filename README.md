@@ -1,2 +1,3 @@
 # servicestoolkit
-Container with troubleshooting tools uses by XIP Online Services
+
+Container with troubleshooting tools used by XIP Online Services
