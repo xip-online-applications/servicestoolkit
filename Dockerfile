@@ -45,3 +45,5 @@ RUN wget -O - https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/sha
   apt-get clean
 
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+CMD [ "sleep", "infinity" ]
