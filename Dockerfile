@@ -8,8 +8,6 @@ RUN apt-get update && \
   lsb-release \
   wget
 
-RUN curl https://zyedidia.github.io/eget.sh | sh
-
 RUN wget -O - https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
 
@@ -82,8 +80,6 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | b
 
 # ASN will be added to apt in 2026, so this script can be removed then and ASN added to apt
 RUN curl https://raw.githubusercontent.com/nitefood/asn/master/asn > /usr/bin/asn && chmod 0755 /usr/bin/asn
-
-RUN ./eget mr-karan/doggo
 
 # remove junk
 RUN apt-get clean

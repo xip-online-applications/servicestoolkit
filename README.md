@@ -33,7 +33,6 @@ Container with troubleshooting tools used by XIP Online Services.
 | `asn`            | ASN (Autonomous System Number) lookup tool            |
 | `bind9-host`     | DNS lookup utility from BIND 9                        |
 | `dnsutils`       | DNS utilities including dig, nslookup, nsupdate       |
-| `doggo`          | Modern command-line DNS client                        |
 | `gping`          | Ping with a graph - visual ping tool                  |
 | `hping3`         | Network tool for sending custom TCP/IP packets        |
 | `iputils-ping`   | Tools to test network connectivity (ping)             |
