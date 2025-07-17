@@ -69,11 +69,12 @@ Container with troubleshooting tools used by XIP Online Services.
 
 ## Database Clients
 
-| Package             | Description                      |
-| ------------------- | -------------------------------- |
-| `mariadb-client`    | MariaDB database client tools    |
-| `postgresql-client` | PostgreSQL database client tools |
-| `redis-tools`       | Redis database client tools      |
+| Package             | Description                            |
+| ------------------- | -------------------------------------- |
+| `kcat`              | Producer and consumer for Apache Kafka |
+| `mariadb-client`    | MariaDB database client tools          |
+| `postgresql-client` | PostgreSQL database client tools       |
+| `redis-tools`       | Redis database client tools            |
 
 ## System Monitoring & Performance
 

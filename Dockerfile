@@ -44,6 +44,7 @@ RUN apt-get update && \
   java-21-amazon-corretto-jdk \
   jq \
   /tmp/k9s_linux_$(dpkg --print-architecture).deb \
+  kcat \
   kubernetes-client \
   mtr-tiny \
   links \
