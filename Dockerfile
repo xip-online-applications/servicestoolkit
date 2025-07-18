@@ -1,9 +1,12 @@
 FROM debian:stable
 
+RUN sed -i 's/^Components: main$/Components: main contrib non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources
+
 RUN apt-get update && \
   apt-get install -y \
   ca-certificates \
   curl \
+  extrepo \
   gnupg \
   lsb-release \
   wget
@@ -21,6 +24,19 @@ RUN wget -qO- 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1D357EA7D
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/mydumper.asc] https://mydumper.github.io/mydumper/repo/apt/debian $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/mydumper.list
 
 RUN wget -O /tmp/k9s_linux_$(dpkg --print-architecture).deb https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb
+
+RUN tee /etc/extrepo/config.yaml > /dev/null <<EOF
+---
+url: https://extrepo-team.pages.debian.net/extrepo-data
+dist: debian
+version: $(lsb_release -cs)
+enabled_policies:
+- main
+- contrib
+- non-free
+EOF
+
+RUN extrepo enable helm
 
 RUN apt-get update && \
   apt-get install -y \
@@ -41,6 +57,7 @@ RUN apt-get update && \
   git-lfs \
   gping \
   grepcidr \
+  helm \
   hping3 \
   ipcalc \
   iputils-ping \
@@ -80,8 +97,6 @@ RUN apt-get update && \
   vim \
   whois \
   zip
-
-RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # ASN will be added to apt in 2026, so this script can be removed then and ASN added to apt
 RUN curl https://raw.githubusercontent.com/nitefood/asn/master/asn > /usr/bin/asn && chmod 0755 /usr/bin/asn
