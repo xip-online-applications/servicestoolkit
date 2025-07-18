@@ -17,6 +17,9 @@ RUN wget -O - https://apt.corretto.aws/corretto.key | gpg --dearmor -o /usr/shar
 RUN wget -O - https://azlux.fr/repo.gpg | gpg --dearmor -o /usr/share/keyrings/azlux.gpg && \
   echo "deb [signed-by=/usr/share/keyrings/azlux.gpg] https://packages.azlux.fr/debian/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azlux.list
 
+RUN wget -qO- 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1D357EA7D10C9320371BDD0279EA15C0E82E34BA&exact=on' | tee /etc/apt/keyrings/mydumper.asc && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/mydumper.asc] https://mydumper.github.io/mydumper/repo/apt/debian $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/mydumper.list
+
 RUN wget -O /tmp/k9s_linux_$(dpkg --print-architecture).deb https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb
 
 RUN apt-get update && \
@@ -47,6 +50,7 @@ RUN apt-get update && \
   kcat \
   kubernetes-client \
   mtr-tiny \
+  mydumper \
   links \
   lynx \
   mariadb-client \
@@ -84,5 +88,7 @@ RUN curl https://raw.githubusercontent.com/nitefood/asn/master/asn > /usr/bin/as
 
 # remove junk
 RUN apt-get clean
+
+WORKDIR /tmp
 
 CMD [ "sleep", "infinity" ]
