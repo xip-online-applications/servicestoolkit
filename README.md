@@ -53,6 +53,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | `ipcalc`     | IP subnet calculator                                      |
 | `netstress`  | Network stress testing tool                               |
 | `subnetcalc` | IPv4/IPv6 subnet calculator                               |
+| `tcpdump`    | Traffic dumper                                            |
 
 ## Cloud & Container Tools
 

@@ -95,6 +95,7 @@ RUN apt-get update && \
   s3fs \
   stress \
   subnetcalc \
+  tcpdump \
   telnet \
   terraform \
   toilet \
