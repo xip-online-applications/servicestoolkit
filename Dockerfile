@@ -11,6 +11,15 @@ RUN apt-get update && \
   lsb-release \
   wget
 
+RUN tee /etc/apt/sources.list.d/debian-backports.sources > /dev/null <<EOF
+Types: deb
+URIs: http://deb.debian.org/debian
+Suites: $(lsb_release -cs)-backports
+Components: main contrib non-free non-free-firmware
+Enabled: yes
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+
 RUN wget -O - https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
 
@@ -19,9 +28,6 @@ RUN wget -O - https://apt.corretto.aws/corretto.key | gpg --dearmor -o /usr/shar
 
 RUN wget -O - https://azlux.fr/repo.gpg | gpg --dearmor -o /usr/share/keyrings/azlux.gpg && \
   echo "deb [signed-by=/usr/share/keyrings/azlux.gpg] https://packages.azlux.fr/debian/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azlux.list
-
-RUN wget -qO- 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1D357EA7D10C9320371BDD0279EA15C0E82E34BA&exact=on' | tee /etc/apt/keyrings/mydumper.asc && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/mydumper.asc] https://mydumper.github.io/mydumper/repo/apt/debian $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/mydumper.list
 
 RUN wget -O /tmp/k9s_linux_$(dpkg --print-architecture).deb https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb
 
