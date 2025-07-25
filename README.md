@@ -112,6 +112,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | Package  | Description                    |
 | -------- | ------------------------------ |
 | `elinks` | Advanced text-mode web browser |
+| `httpie` | API and HTTP interaction       |
 | `links`  | Text-mode web browser          |
 | `lynx`   | Classic text-mode web browser  |
 

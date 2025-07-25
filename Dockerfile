@@ -65,6 +65,7 @@ RUN apt-get update && \
   grepcidr \
   helm \
   hping3 \
+  httpie \
   ipcalc \
   iputils-ping \
   java-21-amazon-corretto-jdk \
