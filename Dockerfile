@@ -9,6 +9,7 @@ RUN apt-get update && \
   extrepo \
   gnupg \
   lsb-release \
+  pipx \
   wget
 
 RUN tee /etc/apt/sources.list.d/debian-backports.sources > /dev/null <<EOF
@@ -108,6 +109,10 @@ RUN apt-get update && \
 
 # ASN will be added to apt in 2026, so this script can be removed then and ASN added to apt
 RUN curl https://raw.githubusercontent.com/nitefood/asn/master/asn > /usr/bin/asn && chmod 0755 /usr/bin/asn
+
+RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+RUN pipx install tftui
 
 # remove junk
 RUN apt-get clean
