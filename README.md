@@ -67,6 +67,8 @@ Container with troubleshooting tools used by XIP Online Services.
 | `rclone`                      | Command-line program to sync files with cloud storage |
 | `s3fs`                        | FUSE filesystem for Amazon S3 buckets                 |
 | `terraform`                   | Infrastructure as Code tool                           |
+| `tflint`                      | Linting Terraform                                     |
+| `tftui`                       | Scroll through Terraform state in a less abstract way |
 
 ## Database Clients
 
