@@ -1,7 +1,5 @@
 FROM debian:stable
 
-RUN sed -i 's/^Components: main$/Components: main contrib non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources
-
 RUN apt-get update && \
   apt-get install -y \
   ca-certificates \
@@ -12,6 +10,20 @@ RUN apt-get update && \
   pipx \
   wget
 
+RUN tee /etc/apt/sources.list.d/debian.sources > /dev/null <<EOF
+Types: deb
+URIs: http://deb.debian.org/debian
+Suites: stable stable-updates oldstable
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+Types: deb
+URIs: http://deb.debian.org/debian-security
+Suites: stable-security
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+
 RUN tee /etc/apt/sources.list.d/debian-backports.sources > /dev/null <<EOF
 Types: deb
 URIs: http://deb.debian.org/debian
@@ -21,16 +33,27 @@ Enabled: yes
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 EOF
 
-RUN wget -O - https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+RUN tee /etc/apt/preferences.d/mijn_voorkeuren.pref > /dev/null <<EOF
+Package: *
+Pin: release a=stable
+Pin-Priority: 666
 
-RUN wget -O - https://apt.corretto.aws/corretto.key | gpg --dearmor -o /usr/share/keyrings/corretto-keyring.gpg && \
-  echo "deb [signed-by=/usr/share/keyrings/corretto-keyring.gpg] https://apt.corretto.aws stable main" | tee /etc/apt/sources.list.d/corretto.list
+Package: *
+Pin: release a=stable-updates
+Pin-Priority: 555
 
-RUN wget -O - https://azlux.fr/repo.gpg | gpg --dearmor -o /usr/share/keyrings/azlux.gpg && \
-  echo "deb [signed-by=/usr/share/keyrings/azlux.gpg] https://packages.azlux.fr/debian/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azlux.list
+Package: *
+Pin: release a=stable-security
+Pin-Priority: 555
 
-RUN wget -O /tmp/k9s_linux_$(dpkg --print-architecture).deb https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb
+Package: *
+Pin: release a=$(lsb_release -cs)-backports
+Pin-Priority: 111
+
+Package: *
+Pin: release a=oldstable
+Pin-Priority: 100
+EOF
 
 RUN tee /etc/extrepo/config.yaml > /dev/null <<EOF
 ---
@@ -43,11 +66,27 @@ enabled_policies:
 - non-free
 EOF
 
-RUN extrepo enable helm
+RUN wget -O - 'https://apt.releases.hashicorp.com/gpg' | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+
+RUN wget -O - 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1D357EA7D10C9320371BDD0279EA15C0E82E34BA&exact=on' | gpg --dearmor -o /etc/apt/keyrings/mydumper.gpg && \
+  echo "deb [signed-by=/etc/apt/keyrings/mydumper.gpg] https://mydumper.github.io/mydumper/repo/apt/debian $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/mydumper.list
+
+RUN wget -O - 'https://apt.corretto.aws/corretto.key' | gpg --dearmor -o /usr/share/keyrings/corretto-keyring.gpg && \
+  echo "deb [signed-by=/usr/share/keyrings/corretto-keyring.gpg] https://apt.corretto.aws stable main" | tee /etc/apt/sources.list.d/corretto.list
+
+RUN wget -O - 'https://azlux.fr/repo.gpg' | gpg --dearmor -o /usr/share/keyrings/azlux.gpg && \
+  echo "deb [signed-by=/usr/share/keyrings/azlux.gpg] https://packages.azlux.fr/debian/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azlux.list
+
+RUN wget -O - 'https://baltocdn.com/helm/signing.asc' | gpg --dearmor -o /usr/share/keyrings/helm.gpg > /dev/null && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
+
+RUN wget -O /tmp/k9s_linux_$(dpkg --print-architecture).deb https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb
 
 RUN apt-get update && \
   apt-get install -y \
   aha \
+  asn \
   awscli \
   bind9-host \
   bsdgames \
@@ -91,7 +130,6 @@ RUN apt-get update && \
   p7zip-full \
   postgresql-client \
   rclone \
-  redis-tools \
   rsync \
   s3fs \
   stress \
@@ -103,18 +141,17 @@ RUN apt-get update && \
   traceroute \
   tree \
   unzip \
+  valkey-tools \
   vim \
   whois \
   zip
-
-# ASN will be added to apt in 2026, so this script can be removed then and ASN added to apt
-RUN curl https://raw.githubusercontent.com/nitefood/asn/master/asn > /usr/bin/asn && chmod 0755 /usr/bin/asn
 
 RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
 RUN pipx install tftui
 
 # remove junk
+RUN pipx ensurepath
 RUN apt-get clean
 
 WORKDIR /tmp

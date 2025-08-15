@@ -79,7 +79,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | `mydumper`          | Export a consistent backup of MariaDB databases                     |
 | `myloader`          | Connects to the destination MariaDB database and imports the backup |
 | `postgresql-client` | PostgreSQL database client tools                                    |
-| `redis-tools`       | Redis database client tools                                         |
+| `valkey-tools`      | Valkey database client tools                                        |
 
 ## System Monitoring & Performance
 
