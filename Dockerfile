@@ -1,3 +1,5 @@
+FROM rabbitmq:management AS rabbitmq-management
+
 FROM debian:stable
 
 RUN apt-get update && \
@@ -78,8 +80,8 @@ RUN wget -O - 'https://apt.corretto.aws/corretto.key' | gpg --dearmor -o /usr/sh
 RUN wget -O - 'https://azlux.fr/repo.gpg' | gpg --dearmor -o /usr/share/keyrings/azlux.gpg && \
   echo "deb [signed-by=/usr/share/keyrings/azlux.gpg] https://packages.azlux.fr/debian/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azlux.list
 
-RUN wget -O - 'https://baltocdn.com/helm/signing.asc' | gpg --dearmor -o /usr/share/keyrings/helm.gpg > /dev/null && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
+RUN wget -O - 'https://packages.buildkite.com/helm-linux/helm-debian/gpgkey' | gpg --dearmor -o /usr/share/keyrings/helm.gpg > /dev/null && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
 
 RUN wget -O /tmp/k9s_linux_$(dpkg --print-architecture).deb https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb
 
@@ -91,13 +93,17 @@ RUN apt-get update && \
   bind9-host \
   bsdgames \
   bzip2 \
+  cmatrix \
+  cowsay \
   cpufetch \
+  crawl \
   debianutils \
   dnsutils \
   duf \
   elinks \
   figlet \
   findutils \
+  fortune fortunes fortunes-bofh-excuses fortunes-debian-hints fortunes-min \
   git \
   git-crypt \
   git-lfs \
@@ -115,15 +121,18 @@ RUN apt-get update && \
   kubernetes-client \
   mtr-tiny \
   mydumper \
+  nethack-console \
   links \
   lynx \
   mariadb-client \
+  moon-buggy \
   nano \
   ncat \
   ncdu \
   net-tools \
   netcat-openbsd \
   netstress \
+  ninvaders \
   nmap \
   openssh-client \
   openssh-server \
@@ -132,6 +141,7 @@ RUN apt-get update && \
   rclone \
   rsync \
   s3fs \
+  sl \
   stress \
   subnetcalc \
   tcpdump \
@@ -149,6 +159,8 @@ RUN apt-get update && \
 RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
 RUN pipx install tftui
+
+COPY --from=rabbitmq-management /usr/local/bin/rabbitmqadmin /usr/local/bin/rabbitmqadmin
 
 # remove junk
 RUN pipx ensurepath

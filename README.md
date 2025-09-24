@@ -79,6 +79,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | `mydumper`          | Export a consistent backup of MariaDB databases                     |
 | `myloader`          | Connects to the destination MariaDB database and imports the backup |
 | `postgresql-client` | PostgreSQL database client tools                                    |
+| `rabbitmqadmin`     | RabbitMQ Management                                                 |
 | `valkey-tools`      | Valkey database client tools                                        |
 
 ## System Monitoring & Performance
@@ -121,11 +122,19 @@ Container with troubleshooting tools used by XIP Online Services.
 
 ## Games & Entertainment
 
-| Package    | Description                                             |
-| ---------- | ------------------------------------------------------- |
-| `bsdgames` | Collection of classic BSD command-line games            |
-| `figlet`   | Make large character ASCII banners out of ordinary text |
-| `toilet`   | Display large colourful characters in text mode         |
+| Package           | Description                                             |
+| ----------------- | ------------------------------------------------------- |
+| `bsdgames`        | Collection of classic BSD command-line games            |
+| `cmatrix`         | 🐇                                                      |
+| `cowsay`          | 🐮                                                      |
+| `crawl`           | 🧝‍♂️                                                      |
+| `figlet`          | Make large character ASCII banners out of ordinary text |
+| `fortune`         | 🥠                                                      |
+| `moon-buggy`      | 🌝                                                      |
+| `nethack-console` | 💀                                                      |
+| `ninvaders`       | 👾                                                      |
+| `sl`              | 🚂                                                      |
+| `toilet`          | Display large colourful characters in text mode         |
 
 ## SSH & Remote Access
 
