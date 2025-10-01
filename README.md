@@ -44,6 +44,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | `telnet`         | Remote terminal connection tool                       |
 | `traceroute`     | Network diagnostic tool to trace packet routes        |
 | `whois`          | Client for the whois directory service                |
+| `wscat`          | Websocket debugging                                   |
 
 ## Network Utilities & Calculators
 

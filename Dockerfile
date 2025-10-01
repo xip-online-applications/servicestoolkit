@@ -134,6 +134,8 @@ RUN apt-get update && \
   netstress \
   ninvaders \
   nmap \
+  nodejs \
+  npm \
   openssh-client \
   openssh-server \
   p7zip-full \
@@ -159,6 +161,8 @@ RUN apt-get update && \
 RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
 RUN pipx install tftui
+
+RUN npm i -g wscat
 
 COPY --from=rabbitmq-management /usr/local/bin/rabbitmqadmin /usr/local/bin/rabbitmqadmin
 
