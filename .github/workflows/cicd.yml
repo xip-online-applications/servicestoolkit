@@ -29,7 +29,7 @@ jobs:
         id: vars
         run: |
           echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-          echo "platform=$(echo ${{ matrix.platform }} | sed 's|/|-|g')" >> $GITHUB_OUTPUT
+          echo "platform=$(echo "${{ matrix.platform }}" | sed 's|/|-|g')" >> $GITHUB_OUTPUT
 
       - name: 💿 Setup Docker (1/2)
         uses: docker/setup-qemu-action@v3
@@ -50,9 +50,9 @@ jobs:
           platforms: ${{ matrix.platform }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ github.workflow.step.vars.sha_short }}-${{ github.workflow.step.vars.platform }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:cache-${{ github.workflow.step.vars.platform }}
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:cache-${{ github.workflow.step.vars.platform }},mode=max
+            ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ steps.vars.outputs.sha_short }}-${{ steps.vars.outputs.platform }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:cache-${{ steps.vars.outputs.platform }}
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:cache-${{ steps.vars.outputs.platform }},mode=max
 
   merge:
     runs-on: ubuntu-latest
@@ -85,6 +85,6 @@ jobs:
       - name: 🚀 Deploy
         run: |
           docker manifest create ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.workflow }}:latest \
-            --amend ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ github.workflow.step.vars.sha_short }}-linux-amd64 \
-            --amend ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ github.workflow.step.vars.sha_short }}-linux-arm64
+            --amend ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ steps.vars.outputs.sha_short }}-linux-amd64 \
+            --amend ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ steps.vars.outputs.sha_short }}-linux-arm64
           docker manifest push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.workflow }}:latest
