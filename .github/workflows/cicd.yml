@@ -49,6 +49,7 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           push: true
+          provenance: false
           tags: |
             ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ steps.vars.outputs.sha_short }}-${{ steps.vars.outputs.platform }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:cache-${{ steps.vars.outputs.platform }}
