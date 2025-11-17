@@ -59,6 +59,9 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/master' || github.event_name == 'schedule'
     steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
       - name: 📗 Outputs
         id: vars
         run: |
