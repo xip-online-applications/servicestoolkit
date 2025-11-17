@@ -1,6 +1,6 @@
-FROM rabbitmq:management AS rabbitmq-management
+FROM public.ecr.aws/docker/library/rabbitmq:management AS rabbitmq-management
 
-FROM debian:stable
+FROM public.ecr.aws/debian/debian:stable
 
 RUN apt-get update && \
   apt-get install -y \

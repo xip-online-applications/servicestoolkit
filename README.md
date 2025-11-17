@@ -12,7 +12,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | ----------------- | -------------------------------------------------------- |
 | `ca-certificates` | Common CA certificates for SSL/TLS verification          |
 | `curl`            | Command-line tool for transferring data with URL syntax  |
-| `gnupg`           | GNU Privacy Guard - cryptographic software               |
+| `gnupg`           | GNU Privacy Guard, cryptographic software                |
 | `lsb-release`     | Linux Standard Base version reporting utility            |
 | `wget`            | Network downloader for retrieving files from web servers |
 
@@ -23,7 +23,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | `git`       | Distributed version control system              |
 | `git-crypt` | Transparent file encryption in git repositories |
 | `git-lfs`   | Git Large File Storage extension                |
-| `vim`       | Vi IMproved - advanced text editor              |
+| `vim`       | Vi IMproved, advanced text editor               |
 | `nano`      | Simple command-line text editor                 |
 
 ## Network & DNS Tools
@@ -33,12 +33,12 @@ Container with troubleshooting tools used by XIP Online Services.
 | `asn`            | ASN (Autonomous System Number) lookup tool            |
 | `bind9-host`     | DNS lookup utility from BIND 9                        |
 | `dnsutils`       | DNS utilities including dig, nslookup, nsupdate       |
-| `gping`          | Ping with a graph - visual ping tool                  |
+| `gping`          | Ping with a graph, visual ping tool                   |
 | `hping3`         | Network tool for sending custom TCP/IP packets        |
 | `iputils-ping`   | Tools to test network connectivity (ping)             |
 | `mtr-tiny`       | Network diagnostic tool combining ping and traceroute |
 | `ncat`           | Modern netcat implementation with SSL support         |
-| `netcat-openbsd` | TCP/IP swiss army knife for network connections       |
+| `netcat-openbsd` | TCP/IP Swiss army knife for network connections       |
 | `net-tools`      | Collection of network tools (netstat, ifconfig, etc.) |
 | `nmap`           | Fancy port scanner                                    |
 | `telnet`         | Remote terminal connection tool                       |
@@ -66,7 +66,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | `k9s`                         | Kubernetes CLI with terminal UI                       |
 | `kubernetes-client`           | Kubernetes command-line tool (kubectl)                |
 | `rclone`                      | Command-line program to sync files with cloud storage |
-| `s3fs`                        | FUSE filesystem for Amazon S3 buckets                 |
+| `s3fs`                        | FUSE file system for Amazon S3 buckets                |
 | `terraform`                   | Infrastructure as Code tool                           |
 | `tflint`                      | Linting Terraform                                     |
 | `tftui`                       | Scroll through Terraform state in a less abstract way |
@@ -85,13 +85,13 @@ Container with troubleshooting tools used by XIP Online Services.
 
 ## System Monitoring & Performance
 
-| Package    | Description                                       |
-| ---------- | ------------------------------------------------- |
-| `cpufetch` | Simple CPU architecture fetching tool             |
-| `duf`      | Disk Usage/Free Utility - modern 'df' alternative |
-| `ncdu`     | NCurses Disk Usage analyzer                       |
-| `stress`   | System stress testing tool                        |
-| `tree`     | Display directory tree structure                  |
+| Package    | Description                                      |
+| ---------- | ------------------------------------------------ |
+| `cpufetch` | Simple CPU architecture fetching tool            |
+| `duf`      | Disk Usage/Free Utility, modern 'df' alternative |
+| `ncdu`     | NCurses Disk Usage analyser                      |
+| `stress`   | System stress testing tool                       |
+| `tree`     | Display directory tree structure                 |
 
 ## File & Archive Management
 

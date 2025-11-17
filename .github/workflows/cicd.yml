@@ -3,65 +3,88 @@ name: servicestoolkit
 on:
   push:
   schedule:
-      - cron: '7 7 7 * *'
+    - cron: "7 7 7 * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  CONTAINER_NAME: servicestoolkit
-
 jobs:
+  build:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📗 Outputs
+        id: vars
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "platform=$(echo "${{ matrix.platform }}" | sed 's|/|-|g')" >> $GITHUB_OUTPUT
+
+      - name: 💿 Setup Docker (1/2)
+        uses: docker/setup-qemu-action@v3
+      - name: 💿 Setup Docker (2/2)
+        uses: docker/setup-buildx-action@v3
+
+      - name: 👤 Login GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏗️ Build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ steps.vars.outputs.sha_short }}-${{ steps.vars.outputs.platform }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:cache-${{ steps.vars.outputs.platform }}
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:cache-${{ steps.vars.outputs.platform }},mode=max
 
   push:
     runs-on: ubuntu-latest
-
+    needs: build
+    if: github.ref == 'refs/heads/master' || github.event_name == 'schedule'
     steps:
-    - name: 📥 Checkout
-      uses: actions/checkout@v5
+      - name: 📗 Outputs
+        id: vars
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-    - name: 📗 Outputs
-      id: vars
-      run: |
-        echo "repo_lower=$(echo "${{ github.repository }}" | awk '{print tolower($0)}')" >> $GITHUB_OUTPUT
+      - name: 💿 Setup Docker (1/2)
+        uses: docker/setup-qemu-action@v3
+      - name: 💿 Setup Docker (2/2)
+        uses: docker/setup-buildx-action@v3
 
-    - name: 💿 Setup Docker (1/2)
-      uses: docker/setup-qemu-action@v3
-    - name: 💿 Setup Docker (2/2)
-      uses: docker/setup-buildx-action@v3
+      - name: 👤 Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: 👤 Login Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-        logout: false
+      - name: 👤 Login GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: 👤 Login GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        logout: false
-
-    - name: 🧪 Test ${{ ENV.CONTAINER_NAME }}
-      if: github.ref != 'refs/heads/master' && github.event_name != 'schedule'
-      uses: docker/build-push-action@v6
-      with:
-        platforms: linux/amd64,linux/arm64
-        push: false
-        cache-from: type=registry,ref=ghcr.io/${{ steps.vars.outputs.repo_lower }}/${{ ENV.CONTAINER_NAME }}:cache
-        cache-to: type=registry,ref=ghcr.io/${{ steps.vars.outputs.repo_lower }}/${{ ENV.CONTAINER_NAME }}:cache,mode=max
-
-    - name: 🚀 Push ${{ ENV.CONTAINER_NAME }}
-      if: github.ref == 'refs/heads/master' || github.event_name == 'schedule'
-      uses: docker/build-push-action@v6
-      with:
-        platforms: linux/amd64,linux/arm64
-        push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ ENV.CONTAINER_NAME }}:latest
-        cache-from: type=registry,ref=ghcr.io/${{ steps.vars.outputs.repo_lower }}/${{ ENV.CONTAINER_NAME }}:cache
-        cache-to: type=registry,ref=ghcr.io/${{ steps.vars.outputs.repo_lower }}/${{ ENV.CONTAINER_NAME }}:cache,mode=max
+      - name: 📦 Push
+        run: |
+          docker manifest create ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.workflow }}:latest \
+            --amend ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ steps.vars.outputs.sha_short }}-linux-amd64 \
+            --amend ghcr.io/${{ github.repository_owner }}/${{ github.workflow }}:${{ steps.vars.outputs.sha_short }}-linux-arm64
+          docker manifest push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.workflow }}:latest
