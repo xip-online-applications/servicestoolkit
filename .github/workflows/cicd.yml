@@ -3,7 +3,7 @@ name: servicestoolkit
 on:
   push:
   schedule:
-    - cron: '7 7 7 * *'
+    - cron: "7 7 7 * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
