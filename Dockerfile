@@ -140,6 +140,8 @@ RUN apt-get update && \
   openssh-server \
   p7zip-full \
   postgresql-client \
+  pyenv \
+  python3-venv \
   rclone \
   rsync \
   s3fs \
