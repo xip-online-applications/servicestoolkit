@@ -171,6 +171,7 @@ COPY --from=rabbitmq-management /usr/local/bin/rabbitmqadmin /usr/local/bin/rabb
 # remove junk
 RUN pipx ensurepath
 RUN apt-get clean
+RUN rm -rf /tmp/k9s_linux_$(dpkg --print-architecture).deb
 
 WORKDIR /tmp
 
