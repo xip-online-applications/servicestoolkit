@@ -62,7 +62,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | ----------------------------- | ----------------------------------------------------- |
 | `awscli`                      | Amazon Web Services Command Line Interface            |
 | `helm`                        | Kubernetes package manager                            |
-| `java-21-amazon-corretto-jdk` | Amazon Corretto OpenJDK 21 distribution               |
+| `java-25-amazon-corretto-jdk` | Amazon Corretto OpenJDK 21 distribution               |
 | `k9s`                         | Kubernetes CLI with terminal UI                       |
 | `kubernetes-client`           | Kubernetes command-line tool (kubectl)                |
 | `rclone`                      | Command-line program to sync files with cloud storage |
