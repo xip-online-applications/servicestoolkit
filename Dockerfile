@@ -41,11 +41,11 @@ Pin: release a=stable
 Pin-Priority: 666
 
 Package: *
-Pin: release a=stable-updates
-Pin-Priority: 555
+Pin: release a=stable-security
+Pin-Priority: 666
 
 Package: *
-Pin: release a=stable-security
+Pin: release a=stable-updates
 Pin-Priority: 555
 
 Package: *
@@ -169,9 +169,9 @@ RUN npm i -g wscat
 COPY --from=rabbitmq-management /usr/local/bin/rabbitmqadmin /usr/local/bin/rabbitmqadmin
 
 # remove junk
-RUN pipx ensurepath
-RUN apt-get clean
-RUN rm -rf /tmp/k9s_linux_$(dpkg --print-architecture).deb
+RUN pipx ensurepath && \
+  apt-get clean && \
+  rm -rf /tmp/k9s_linux_$(dpkg --print-architecture).deb
 
 WORKDIR /tmp
 
