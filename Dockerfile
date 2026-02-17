@@ -148,6 +148,7 @@ RUN apt-get update && \
   sl \
   stress \
   subnetcalc \
+  sysbench \
   tcpdump \
   telnet \
   terraform \
@@ -164,14 +165,15 @@ RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/in
 
 RUN pipx install tftui
 
-RUN npm i -g wscat
+RUN npm i -g prettier wscat
 
 COPY --from=rabbitmq-management /usr/local/bin/rabbitmqadmin /usr/local/bin/rabbitmqadmin
 
 # remove junk
 RUN pipx ensurepath && \
   apt-get clean && \
-  rm -rf /tmp/k9s_linux_$(dpkg --print-architecture).deb
+  rm -rf /tmp/k9s_linux_$(dpkg --print-architecture).deb && \
+  npm cache clean --force
 
 WORKDIR /tmp
 

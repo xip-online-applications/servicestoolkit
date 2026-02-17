@@ -91,6 +91,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | `duf`      | Disk Usage/Free Utility, modern 'df' alternative |
 | `ncdu`     | NCurses Disk Usage analyser                      |
 | `stress`   | System stress testing tool                       |
+| `sysbench` | Benchmarking for databases and everything else   |
 | `tree`     | Display directory tree structure                 |
 
 ## File & Archive Management
@@ -111,6 +112,7 @@ Container with troubleshooting tools used by XIP Online Services.
 | `debianutils` | Includes `which`, which is awesome                     |
 | `findutils`   | File finding utilities (find, locate, updatedb, xargs) |
 | `jq`          | Command-line JSON processor                            |
+| `prettier`    | Unminimize code to make it readable for mere humans    |
 
 ## Web Browsers & Text-based Internet
 
