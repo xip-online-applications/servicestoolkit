@@ -165,7 +165,7 @@ RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/in
 
 RUN pipx install tftui
 
-RUN npm i -g prettier wscat
+RUN npm i -g @biomejs/biome wscat
 
 COPY --from=rabbitmq-management /usr/local/bin/rabbitmqadmin /usr/local/bin/rabbitmqadmin
 

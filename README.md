@@ -109,10 +109,10 @@ Container with troubleshooting tools used by XIP Online Services.
 | Package       | Description                                            |
 | ------------- | ------------------------------------------------------ |
 | `aha`         | ANSI HTML Adapter - converts terminal output to HTML   |
+| `biome`       | Unminimize code to make it readable for mere humans    |
 | `debianutils` | Includes `which`, which is awesome                     |
 | `findutils`   | File finding utilities (find, locate, updatedb, xargs) |
 | `jq`          | Command-line JSON processor                            |
-| `prettier`    | Unminimize code to make it readable for mere humans    |
 
 ## Web Browsers & Text-based Internet
 
