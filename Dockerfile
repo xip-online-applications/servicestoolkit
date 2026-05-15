@@ -8,8 +8,10 @@ RUN apt-get update && \
   curl \
   extrepo \
   gnupg \
+  jq \
   lsb-release \
   pipx \
+  unzip \
   wget
 
 RUN tee /etc/apt/sources.list.d/debian.sources > /dev/null <<EOF
@@ -68,8 +70,11 @@ enabled_policies:
 - non-free
 EOF
 
-RUN wget -O - 'https://apt.releases.hashicorp.com/gpg' | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+RUN ARCH=$(dpkg --print-architecture) && \
+  TF_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version) && \
+  wget -O /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_${ARCH}.zip" && \
+  unzip -o /tmp/terraform.zip -d /usr/local/bin/ && \
+  rm /tmp/terraform.zip
 
 RUN wget -O - 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1D357EA7D10C9320371BDD0279EA15C0E82E34BA&exact=on' | gpg --dearmor -o /etc/apt/keyrings/mydumper.gpg && \
   echo "deb [signed-by=/etc/apt/keyrings/mydumper.gpg] https://mydumper.github.io/mydumper/repo/apt/debian $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/mydumper.list
@@ -115,7 +120,6 @@ RUN apt-get update && \
   ipcalc \
   iputils-ping \
   java-25-amazon-corretto-jdk \
-  jq \
   /tmp/k9s_linux_$(dpkg --print-architecture).deb \
   kcat \
   kubernetes-client \
@@ -151,11 +155,9 @@ RUN apt-get update && \
   sysbench \
   tcpdump \
   telnet \
-  terraform \
   toilet \
   traceroute \
   tree \
-  unzip \
   valkey-tools \
   vim \
   whois \
