@@ -17,13 +17,13 @@ RUN apt-get update && \
 RUN tee /etc/apt/sources.list.d/debian.sources > /dev/null <<EOF
 Types: deb
 URIs: http://deb.debian.org/debian
-Suites: stable stable-updates oldstable
+Suites: $(lsb_release -cs) $(lsb_release -cs)-updates
 Components: main contrib non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
 URIs: http://deb.debian.org/debian-security
-Suites: stable-security
+Suites: $(lsb_release -cs)-security
 Components: main contrib non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 EOF
@@ -39,24 +39,20 @@ EOF
 
 RUN tee /etc/apt/preferences.d/mijn_voorkeuren.pref > /dev/null <<EOF
 Package: *
-Pin: release a=stable
+Pin: release n=$(lsb_release -cs)
 Pin-Priority: 666
 
 Package: *
-Pin: release a=stable-security
+Pin: release n=$(lsb_release -cs)-security
 Pin-Priority: 666
 
 Package: *
-Pin: release a=stable-updates
+Pin: release n=$(lsb_release -cs)-updates
 Pin-Priority: 555
 
 Package: *
-Pin: release a=$(lsb_release -cs)-backports
+Pin: release n=$(lsb_release -cs)-backports
 Pin-Priority: 111
-
-Package: *
-Pin: release a=oldstable
-Pin-Priority: 100
 EOF
 
 RUN tee /etc/extrepo/config.yaml > /dev/null <<EOF
@@ -91,6 +87,8 @@ RUN wget -O - 'https://packages.buildkite.com/helm-linux/helm-debian/gpgkey' | g
 RUN wget -O /tmp/k9s_linux_$(dpkg --print-architecture).deb https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb
 
 RUN apt-get update && \
+  PY_LIB_VER="$(apt-cache policy libpython3.13-stdlib | awk '/Candidate:/ {print $2}')" && \
+  apt-get install -y "libpython3.13=${PY_LIB_VER}" "libpython3.13-stdlib=${PY_LIB_VER}" && \
   apt-get install -y \
   aha \
   asn \
