@@ -161,7 +161,11 @@ RUN apt-get update && \
   whois \
   zip
 
-RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+RUN ln -s /usr/bin/valkey-cli /usr/bin/redis-cli
+
+RUN wget -O /tmp/tflint_linux_$(dpkg --print-architecture).zip https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_$(dpkg --print-architecture).zip && \
+  unzip /tmp/tflint_linux_$(dpkg --print-architecture).zip -d /tmp && \
+  install -c -v /tmp/tflint /usr/local/bin/
 
 RUN pipx install tftui
 
@@ -172,7 +176,7 @@ COPY --from=rabbitmq-management /usr/local/bin/rabbitmqadmin /usr/local/bin/rabb
 # remove junk
 RUN pipx ensurepath && \
   apt-get clean && \
-  rm -rf /tmp/k9s_linux_$(dpkg --print-architecture).deb && \
+  rm -rf /tmp/* && \
   npm cache clean --force
 
 WORKDIR /tmp
