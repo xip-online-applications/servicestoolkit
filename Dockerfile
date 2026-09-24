@@ -161,6 +161,8 @@ RUN apt-get update && \
   whois \
   zip
 
+RUN ln -s /usr/bin/valkey-cli /usr/bin/redis-cli
+
 RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
 RUN pipx install tftui
